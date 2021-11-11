@@ -8,13 +8,33 @@ import StudentForm from './StudentForm'
 const Students = () => {
 
   const [students, setStudents] = useState([])
+  const [studentDetails, setStudentDetails] = useState()
 
-  const onDelete =  (id) => {
-    const res = fetch(`http://localhost:9091/api/school/student?id=${id}`, {
-      method: 'DELETE',
+  const fetchStudentDetails = async (id) => {
+    const res = await fetch('http://localhost:9091/api/school/studentDetails?id=' + id)
+    .then(response => {
+      if(response.status === 200){
+        console.log(response)
+        return response
+      }
     }).catch(error => {
-      console.log(error.message)
+      console.log('Couldn\'t get studentsDetials for for id: ' + id + ' from server: ' + error.message)
     })
+    return await res.json()
+  }
+
+  const deleteStudent = async (id) => {
+    console.log(id)
+    await fetch('http://localhost:9091/api/school/student?id=' + id, {method: 'DELETE',})
+      .then(response => {
+        if(response.status === 204){
+          console.log("succesfully deleted student")
+          setStudents(students.filter(student => student.id !== id))
+        }
+      })
+      .catch(error => {
+        console.log(error.message)
+      })
   }
   
   useEffect(() => {
@@ -27,18 +47,24 @@ const Students = () => {
   
   const fetchStudents = async () => {
     const res = await fetch('http://localhost:9091/api/school/student/findAll')
-    const data = await res.json()
-    return data
+    .then(response => {
+      if(response.status === 200){
+        return response
+      }
+    }).catch(error => {
+      console.log('Couldn\'t get students from server: ' + error.message)
+      return []
+    })
+    return await res.json()
   }
 
   const [showAddStudentForm, setShowAddStudentForm] = useState(false) 
-  const color = showAddStudentForm ? 'darkRed' : 'green'
   const text = showAddStudentForm ? 'Close Creator' : 'Add Student'
 
   return (
     <div>
       <div>
-        <Button color={color} text={text} onClickFunc={() => {setShowAddStudentForm(!showAddStudentForm)}}/>
+        <Button className={'header-btn'} text={text} onClickFunc={() => {setShowAddStudentForm(!showAddStudentForm)}}/>
       </div>
       <div>
         {showAddStudentForm && <StudentForm className='studetForm'/>}
@@ -46,7 +72,7 @@ const Students = () => {
       {!showAddStudentForm && <div>
           {students.map((student) => (
               <div key={student.id}> 
-                  <Student student={student} onDelete={onDelete} />
+                  <Student student={student} onDelete={deleteStudent} onDetails={fetchStudentDetails} />
               </div>
           ))}
       </div>}

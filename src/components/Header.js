@@ -1,35 +1,41 @@
-import PropTypes from 'prop-types'
 import Button from './Button'
+import { useState } from 'react'
+import { useHistory } from "react-router-dom";
 
-const Header = ({onClickStudentbtn}) => {
+const Header = ({loggedInFunc}) => {
 
-  const onClickLogin = () => {
-    console.log('Login..')
+  const [loggedIn, setLoggedIn] = useState(false)
+  const history = useHistory();
+
+  const onClickLoginBtn = () => {
+    setLoggedIn(true)
+    loggedInFunc(true)
   }
 
-  const onClickLogout = () => {
-    console.log('Logout..')
+  const onClickLogoutBtn = () => {
+    setLoggedIn(false)
+    loggedInFunc(false)
   }
 
-  const onClickStudents = () => {
-    console.log('students..')
-  }
-  
+  function onClickHomeBtn() {history.push("/");}
+
+  const onClickContactBtn = () =>  {history.push("/contact");}
+
   return (
-    <header className='header'>
-      <div>
-        <Button text='Students' onClickFunc={onClickStudentbtn}/>
-        <Button text='Teachers' onClickFunc={onClickStudents}/>
-        <Button text='Library'/>
-        <Button text='Auctioner'/>
-      </div>
-      <div>
-        <Button color='green' text='Login' onClickFunc={onClickLogin}/>
-        <Button color='green' text='Logout' onClickFunc={onClickLogout}/>
-      </div>
-    </header>
+    <div>
+      <header className='header'>
+        <div>
+          <h1 className='universityHeader'>University</h1>
+        </div>
+        <div>
+          <Button text='Home' className={'header-btn'} onClickFunc={onClickHomeBtn}/>
+          <Button text='Contact' className={'header-btn'} onClickFunc={onClickContactBtn}/>
+          {!loggedIn && <Button text='Login'  className={'header-btn-login'} onClickFunc={onClickLoginBtn} />}
+          {loggedIn  && <Button text='Logout' className={'header-btn-login'} onClickFunc={onClickLogoutBtn} />}
+        </div>
+      </header>
+    </div>
   )
 }
-
 
 export default Header
