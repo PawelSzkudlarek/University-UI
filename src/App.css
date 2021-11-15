@@ -201,8 +201,15 @@ clear: both;
   width: 100%;
 }
 
-.task {
+.student {
   background: #f4f4f4;
+  margin: 5px;
+  padding: 6px 20px;
+  cursor: pointer;
+}
+
+.studentDetails {
+  background: #f4f4f47e;
   margin: 5px;
   padding: 6px 20px;
   cursor: pointer;
@@ -215,11 +222,17 @@ clear: both;
   width: 50px;
 }
 
-.task.reminder {
+.student.reminder {
   border-left: 5px solid green;
 }
 
-.task h3 {
+.student h3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.student h4 {
   display: flex;
   align-items: center;
   justify-content: space-between;

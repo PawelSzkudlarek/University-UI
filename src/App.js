@@ -3,7 +3,8 @@ import './App.css';
 import Header from './components/Header';
 import Home from './components/Home';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import Students from './components/Students';
+import Students from './components/student/Students';
+import Teachers from './components/Teachers'
 import Contact from './components/Contact'
 import AdminNavbar from './components/AdminNavbar';
 
@@ -13,7 +14,6 @@ const [loggedIn, setloggedIn] = useState(false)
 
 const loginState = (isLoggedIn) => {
   setloggedIn(isLoggedIn)
-
 }
 
   return (
@@ -31,15 +31,17 @@ const loginState = (isLoggedIn) => {
               <Route exact path='/'>
                 <Home></Home>
               </Route>
-              <Route exact path='/students'>
-                <Students></Students>
-              </Route>
               <Route exact path='/contact'>
                 <Contact></Contact>
               </Route>
-              <Route exact path='/students'>
-                <Students></Students>
-              </Route>
+              {loggedIn && <div>
+                <Route exact path='/students'>
+                  <Students></Students>
+                </Route>
+                <Route exact path='/teachers'>
+                  <Teachers></Teachers>
+                </Route>
+              </div>}
             </Switch>
           </div>
       </div>

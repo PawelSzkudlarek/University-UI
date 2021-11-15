@@ -15,10 +15,10 @@ const Header = ({loggedInFunc}) => {
   const onClickLogoutBtn = () => {
     setLoggedIn(false)
     loggedInFunc(false)
+    history.push("/")
   }
 
-  function onClickHomeBtn() {history.push("/");}
-
+  const onClickHomeBtn = () => {history.push("/");}
   const onClickContactBtn = () =>  {history.push("/contact");}
 
   return (
