@@ -43,7 +43,7 @@ const [students, setStudents] = useState([])
   useEffect(() => {
     const getStudents = async () => {
       const students = await fetchStudents()
-      setStudents(students)
+      setStudents(students.content)
     }
       getStudents()
   }, [])

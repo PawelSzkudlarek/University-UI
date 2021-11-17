@@ -217,9 +217,11 @@ clear: both;
 
 .studentsOptions{
   display: flex;
+  margin-right: 0;
+  margin-left: auto;
   justify-content: space-between;
   padding: 10px 0;
-  width: 50px;
+  /* width: 70px; */
 }
 
 .student.reminder {
