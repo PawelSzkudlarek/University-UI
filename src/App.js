@@ -4,7 +4,7 @@ import Header from './components/Header';
 import Home from './components/Home';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Students from './components/student/Students';
-import Teachers from './components/Teachers'
+import Employees from './components/Employees'
 import Contact from './components/Contact'
 import AdminNavbar from './components/AdminNavbar';
 
@@ -38,8 +38,8 @@ const loginState = (isLoggedIn) => {
                 <Route exact path='/students'>
                   <Students></Students>
                 </Route>
-                <Route exact path='/teachers'>
-                  <Teachers></Teachers>
+                <Route exact path='/Employees'>
+                  <Employees></Employees>
                 </Route>
               </div>}
             </Switch>

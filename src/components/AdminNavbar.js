@@ -11,16 +11,16 @@ const history = useHistory()
   }
 
   const onClickTeachersbtn = () => {
-    history.push('/teachers')
+    history.push('/employees')
   }
 
   return (
     <div className='adminNavbar'>
         <Button className={'adminNavbar-btn'} text='Students' onClickFunc = {onClickStudentbtn}/>
         <br></br>
-        <Button className={'adminNavbar-btn'} text='Teachers' onClickFunc = {onClickTeachersbtn}/>
-        <br></br>
-        <Button className={'adminNavbar-btn'} text='Staff' />
+        <Button className={'adminNavbar-btn'} text='Employee' onClickFunc = {onClickTeachersbtn}/>
+        {/* <br></br>
+        <Button className={'adminNavbar-btn'} text='Staff' /> */}
     </div>
   )
 }
