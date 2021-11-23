@@ -1,8 +1,8 @@
-import { faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faEdit, faFastBackward, faFastForward, faStepBackward, faStepForward, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import { Button, ButtonGroup, Card, Table } from 'react-bootstrap';
+import { Button, ButtonGroup, Card, FormControl, InputGroup, Table } from 'react-bootstrap';
 
 const Employees = () => {
 
@@ -10,6 +10,7 @@ const Employees = () => {
   const [totalElements, setTotalElements] = useState()
   const [page, setPage] = useState(1)
   const [size, setSize] = useState(10)
+  const [totalPages, setTotalPages] = useState()
 
   const fetchEmployees = async () => {
     return await fetch('http://localhost:9091/api/school/employee/findAll?page=' + page + "&size=" + size)
@@ -31,9 +32,9 @@ const Employees = () => {
       const employees = await fetchEmployees()
       setEmployees(employees.content)
       setTotalElements(employees.totalElements)
+      setTotalPages(employees.totalElements / size)
     }
     getEmployees()
-    console.log(employees.length)
   }, [])
 
 
@@ -47,6 +48,37 @@ const Employees = () => {
 
   }
 
+  const getEmployees = async () => {
+    const employees = await fetchEmployees()
+    setEmployees(employees.content)
+    setTotalElements(employees.totalElements)
+  }
+
+  const nextPage = () => {
+    setPage(page + 1)
+    getEmployees()
+  }
+
+  const previousPage = () => {
+    setPage(page - 1)
+    getEmployees()
+  }
+
+  const firstPage = () => {
+    setPage(1)
+    getEmployees();
+  }
+
+  const lastPage = () => {
+    setPage(lastPage)
+    getEmployees();
+  }
+
+  const changePage = event => {
+    console.log('value ' + event.target.value)
+    setPage(parseInt(event.target.value))
+    getEmployees();
+  }
 
   return (
     <Card className='border border-dark'>
@@ -86,13 +118,48 @@ const Employees = () => {
             }
           </tbody>
           <tr align='center'>
-            <td>Total amount of employees {totalElements}</td>
+            <td>Total amount of employee: {totalElements}</td>
           </tr>
         </Table>
       </Card.Body>
       <Card.Footer>
-        <div style={{ 'float': 'left' }}>Showing Page: </div>
-        <div style={{ 'float': 'right' }}>Right</div>
+        <div style={{ 'float': 'left' }}>Showing Page: {page} of {totalElements / size} </div>
+        <div style={{ 'float': 'right' }}>
+          <InputGroup size='sm'>
+
+            <Button
+              type='button'
+              variant='outline-info'
+              disabled={page === 1 ? true : false}
+              onClick={() => firstPage}>
+              <FontAwesomeIcon icon={faFastBackward}></FontAwesomeIcon> First
+            </Button>
+
+            <Button
+              type='button'
+              variant='outline-info' disabled={page === 1 ? true : false}
+              onClick={() => previousPage()}>
+              <FontAwesomeIcon icon={faStepBackward}></FontAwesomeIcon>Prev
+            </Button>
+
+            <FormControl onChange={changePage} />
+
+            <Button type='button'
+              variant='outline-info'
+              disabled={page === lastPage ? true : false}
+              onClick={() => nextPage}>
+              <FontAwesomeIcon icon={faStepForward}></FontAwesomeIcon>Next
+            </Button>
+
+            <Button
+              type='button'
+              variant='outline-info'
+              disabled={page === lastPage ? true : false}
+              onClick={() => lastPage}>
+              <FontAwesomeIcon icon={faFastForward}></FontAwesomeIcon>Last
+            </Button>
+          </InputGroup>
+        </div>
       </Card.Footer>
     </Card>
   )
