@@ -3,38 +3,33 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Card, FormControl, InputGroup, Table } from 'react-bootstrap';
+import { useHistory } from "react-router-dom";
 
 const Employees = () => {
 
   const [employees, setEmployees] = useState([])
-  const [totalElements, setTotalElements] = useState()
-  const [page, setPage] = useState(1)
+  const [totalElements, setTotalElements] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
   const [size, setSize] = useState(10)
   const [totalPages, setTotalPages] = useState()
 
-  const fetchEmployees = async () => {
-    return await fetch('http://localhost:9091/api/school/employee/findAll?page=' + page + "&size=" + size)
-      .then(response => {
-        if (response.status >= 400 && response.status < 600) {
-          throw new Error("Bad response from server");
-        }
-        if (response.status === 200) {
-          return response.json()
-        }
-      }).catch((error) => {
-        console.log('Couldn\'t get employees from server: ' + error.content)
-        return []
-      })
+  const findEmployees = (currentPage) => {
+    currentPage -= 1;
+    axios.get('http://localhost:9091/api/school/employee/findAll?page=' + currentPage + "&size=" + size)
+    .then(response => response.data)
+    .then(data => {
+      setEmployees(data.content)
+      setTotalElements(data.totalElements)
+      setTotalPages(data.totalPages)
+      setCurrentPage(data.number + 1)
+    })
+    .catch((error) => {
+      console.log(error);
+    });
   }
 
   useEffect(() => {
-    const getEmployees = async () => {
-      const employees = await fetchEmployees()
-      setEmployees(employees.content)
-      setTotalElements(employees.totalElements)
-      setTotalPages(employees.totalElements / size)
-    }
-    getEmployees()
+    findEmployees(currentPage)
   }, [])
 
 
@@ -45,39 +40,15 @@ const Employees = () => {
           setEmployees(employees.filter(emp => emp.id !== id));
         }
       });
-
   }
 
-  const getEmployees = async () => {
-    const employees = await fetchEmployees()
-    setEmployees(employees.content)
-    setTotalElements(employees.totalElements)
-  }
-
-  const nextPage = () => {
-    setPage(page + 1)
-    getEmployees()
-  }
-
-  const previousPage = () => {
-    setPage(page - 1)
-    getEmployees()
-  }
-
-  const firstPage = () => {
-    setPage(1)
-    getEmployees();
-  }
-
-  const lastPage = () => {
-    setPage(lastPage)
-    getEmployees();
+  const setPage = (page) => {
+    findEmployees(page)
   }
 
   const changePage = event => {
     console.log('value ' + event.target.value)
-    setPage(parseInt(event.target.value))
-    getEmployees();
+    findEmployees(parseInt(event.target.value));
   }
 
   return (
@@ -88,6 +59,7 @@ const Employees = () => {
         <Table bordered striped hover>
           <thead>
             <tr>
+              <th>Id</th>
               <th>First Name</th>
               <th>Last Name</th>
               <th>Email</th>
@@ -101,6 +73,7 @@ const Employees = () => {
             {
               employees.map((employee) => (
                 <tr key={employee.id}>
+                  <td>{employee.id}</td>
                   <td>{employee.person.name}</td>
                   <td>{employee.person.lastName}</td>
                   <td>{employee.person.email}</td>
@@ -110,7 +83,7 @@ const Employees = () => {
                   <td>
                     <ButtonGroup>
                       <Button size='sm' variant='outline-primary'> <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon></Button>
-                      <Button size='sm' variant='outline-primary'> <FontAwesomeIcon icon={faTrash} onClick={() => deleteEmployee(employee.id)}></FontAwesomeIcon></Button>
+                      <Button size='sm' variant='outline-primary'> <FontAwesomeIcon icon={faTrash} onClick={deleteEmployee(employee.id)}></FontAwesomeIcon></Button>
                     </ButtonGroup>
                   </td>
                 </tr>
@@ -122,40 +95,41 @@ const Employees = () => {
           </tr>
         </Table>
       </Card.Body>
-      <Card.Footer>
-        <div style={{ 'float': 'left' }}>Showing Page: {page} of {totalElements / size} </div>
-        <div style={{ 'float': 'right' }}>
-          <InputGroup size='sm'>
+      <Card.Footer className='border border-dark'>
+        <div style={{ 'float': 'left' }}>Showing Page: {currentPage} of {totalElements / size} </div>
+        <div style={{ 'float': 'right'}}>
 
+          <InputGroup size='sm'>
             <Button
               type='button'
               variant='outline-info'
-              disabled={page === 1 ? true : false}
-              onClick={() => firstPage}>
+              disabled={currentPage === 1 ? true : false}
+              onClick={() => setPage(1)}>
               <FontAwesomeIcon icon={faFastBackward}></FontAwesomeIcon> First
             </Button>
 
             <Button
               type='button'
-              variant='outline-info' disabled={page === 1 ? true : false}
-              onClick={() => previousPage()}>
+              variant='outline-info' 
+              disabled={currentPage === 1 ? true : false}
+              onClick={() => setPage(currentPage - 1)}>
               <FontAwesomeIcon icon={faStepBackward}></FontAwesomeIcon>Prev
             </Button>
 
-            <FormControl onChange={changePage} />
+            <FormControl value={currentPage} onChange={changePage} />
 
             <Button type='button'
               variant='outline-info'
-              disabled={page === lastPage ? true : false}
-              onClick={() => nextPage}>
+              disabled={currentPage === totalPages ? true : false}
+              onClick={() => setPage(currentPage + 1)}>
               <FontAwesomeIcon icon={faStepForward}></FontAwesomeIcon>Next
             </Button>
 
             <Button
               type='button'
               variant='outline-info'
-              disabled={page === lastPage ? true : false}
-              onClick={() => lastPage}>
+              disabled={currentPage === totalPages ? true : false}
+              onClick={() => setPage(totalPages)}>
               <FontAwesomeIcon icon={faFastForward}></FontAwesomeIcon>Last
             </Button>
           </InputGroup>
