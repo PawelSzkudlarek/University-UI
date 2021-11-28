@@ -27,7 +27,7 @@ const Header = ({loggedInFunc}) => {
         <div>
           <h1 className='universityHeader'>University</h1>
         </div>
-        <div>
+        <div style={{'margin-right': '20px'}}>
           <Button text='Home' className={'header-btn'} onClickFunc={onClickHomeBtn}/>
           <Button text='Contact' className={'header-btn'} onClickFunc={onClickContactBtn}/>
           {!loggedIn && <Button text='Login'  className={'header-btn-login'} onClickFunc={onClickLoginBtn} />}

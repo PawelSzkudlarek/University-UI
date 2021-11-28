@@ -38,15 +38,13 @@ body {
   text-shadow: 0 0 3px #0d6829, 0 0 5px #03031b;
 }
 
-/* .container {
-  max-width: 500px;
-  margin: 30px auto;
-  overflow: auto;
-  min-height: 300px;
-  border: 1px solid steelblue;
-  padding: 30px;
-  border-radius: 5px;
-} */
+.page-num {
+  width: 45px;
+  border: 1px solid #17a2b8;
+  color: #00d0f0;
+  text-align: center;
+  font-weight: bold;
+}
 
 .header {
   display: flex;
@@ -56,7 +54,7 @@ body {
 }
 
 .content {
-  width: 60%;
+  width: 70%;
   float: left;
   margin-left: 5px;
 }

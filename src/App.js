@@ -4,9 +4,10 @@ import Header from './components/Header';
 import Home from './components/Home';
 import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Students from './components/student/Students';
-import Employees from './components/Employees'
+import Employees from './components/employees/Employees'
 import Contact from './components/Contact'
 import AdminNavbar from './components/AdminNavbar';
+import Employee from './components/employees/Employee';
 
 function App() {
 
@@ -40,6 +41,12 @@ const loginState = (isLoggedIn) => {
                 </Route>
                 <Route exact path='/Employees'>
                   <Employees></Employees>
+                </Route>
+                <Route exact path='/Employee/:id'>
+                  <Employee></Employee>
+                </Route>
+                <Route exact path='/Employee'>
+                  <Employee></Employee>
                 </Route>
               </div>}
             </Switch>
