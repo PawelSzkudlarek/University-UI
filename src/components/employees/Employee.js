@@ -45,7 +45,7 @@ const Employee = () => {
           console.error('There was an error!', error);
         });
     }
-  }, {})
+  }, [])
 
   const onUpdate = (form) => {
     axios.put("http://localhost:9091/api/school/employee", {
@@ -65,15 +65,12 @@ const Employee = () => {
       workArea: workArea,
     })
       .then(response => {
-        console.log('New employee submited..')
         setShowSuccessToast(true)
-        setTimeout(() => setShowSuccessToast(false), 3000)
-
+        setTimeout(() => setShowSuccessToast(false), 2000)
       })
       .catch(error => {
         console.error('There was an error!', error);
       });
-    console.log('UPDATE.........................XXXXXXXXXXX')
   }
 
   const onSubmit = (form) => {
@@ -96,7 +93,7 @@ const Employee = () => {
       .then(response => {
         console.log('New employee submited..')
         setShowSuccessToast(true)
-        setTimeout(() => setShowSuccessToast(false), 3000)
+        setTimeout(() => setShowSuccessToast(false), 2000)
 
       })
       .catch(error => {

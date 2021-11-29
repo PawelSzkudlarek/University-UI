@@ -43,7 +43,7 @@ const Employees = () => {
         if (response.status === 202) {
           setEmployees(employees.filter(emp => emp.id !== id));
           setShowDeleteToast(true)
-          setTimeout(setShowDeleteToast(false), 3000)
+          setTimeout(() => setShowDeleteToast(false), 2000)
         }
       }).catch((error) => {
         console.log(error);
@@ -61,13 +61,13 @@ const Employees = () => {
 
   return (
     <div>
-      <div>
+      {showDeleteToast && <div>
         <CustomToast
           message="Employee deleted successfully"
           toastClassName='border border danger bg-danger text-white'
           headerClassName='bg-danger text-white'
         ></CustomToast>
-      </div>
+      </div>}
       <div>
         <Card>
           <Card.Header align='center' style={{ text: 'bold' }}> Employees</Card.Header>
@@ -77,39 +77,35 @@ const Employees = () => {
           <Card.Body>
             <Table bordered hover striped variant="light">
               <thead>
-                <tr>
-                  <th>Id</th>
-                  <th>First Name</th>
-                  <th>Last Name</th>
-                  <th>Email</th>
-                  <th>Personal Number</th>
-                  <th>Type</th>
-                  <th>Work Area</th>
-                  <th>Actions</th>
-                </tr>
+                <th>Id</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Personal Number</th>
+                <th>Type</th>
+                <th>Work Area</th>
+                <th>Actions</th>
               </thead>
               <tbody>
-                {
-                  employees.map((employee) => (
-                    <tr key={employee.id}>
-                      <td>{employee.id}</td>
-                      <td>{employee.person.name}</td>
-                      <td>{employee.person.lastName}</td>
-                      <td>{employee.person.email}</td>
-                      <td>{employee.person.personalNumber}</td>
-                      <td>{employee.person.personType}</td>
-                      <td>{employee.workArea}</td>
-                      <td>
-                        <ButtonGroup>
-                          <Link to={'/employee/' + employee.id} variant='outline-success' >
-                            <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon></Link>{' '}
+                {employees.map((employee) => (
+                  <tr key={employee.id}>
+                    <td>{employee.id}</td>
+                    <td>{employee.person.name}</td>
+                    <td>{employee.person.lastName}</td>
+                    <td>{employee.person.email}</td>
+                    <td>{employee.person.personalNumber}</td>
+                    <td>{employee.person.personType}</td>
+                    <td>{employee.workArea}</td>
+                    <td>
+                      <ButtonGroup>
+                        <Link to={'/employee/' + employee.id} className="btn btn-sm btn-outline-primary" >
+                          <FontAwesomeIcon icon={faEdit}></FontAwesomeIcon></Link>{' '}
 
-                          <Button size='sm' variant='outline-danger'> <FontAwesomeIcon icon={faTrash} onClick={() => deleteEmployee(employee.id)}></FontAwesomeIcon></Button>
-                        </ButtonGroup>
-                      </td>
-                    </tr>
-                  ))
-                }
+                        <Button size='sm' variant='outline-danger'> <FontAwesomeIcon icon={faTrash} onClick={() => deleteEmployee(employee.id)}></FontAwesomeIcon></Button>
+                      </ButtonGroup>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
               <tr align='center'>
                 <td>Total amount of employee: {totalElements}</td>
@@ -117,10 +113,10 @@ const Employees = () => {
             </Table>
           </Card.Body>
           <Card.Footer>
-            <div style={{ float: "left" }}>Showing Page: {currentPage} of {totalElements / size} </div>
+            <div style={{ float: "left" }}>Showing Page: {currentPage} of {Math.ceil(totalElements / size)} </div>
             <div style={{ float: "right" }}>
 
-              <InputGroup>
+              <InputGroup size='sm'>
                 <Button
                   type='button'
                   variant='outline-info'
@@ -137,7 +133,7 @@ const Employees = () => {
                   <FontAwesomeIcon icon={faStepBackward}></FontAwesomeIcon>Prev
                 </Button>
 
-                <FormControl className={"page-num"} value={currentPage} onChange={changePage} />
+                <FormControl className={"page-num bg-white"} value={currentPage} onChange={changePage} />
 
                 <Button type='button'
                   variant='outline-info'

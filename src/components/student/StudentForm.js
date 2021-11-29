@@ -24,7 +24,7 @@ const StudentForm = () => {
         name: name,
         lastName: lastName,
         email: email,
-        login: login,
+        username: login,
         city: city,
         personalNumber : personalNumber
       })

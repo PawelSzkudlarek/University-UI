@@ -20,6 +20,7 @@ const Header = ({loggedInFunc}) => {
 
   const onClickHomeBtn = () => {history.push("/");}
   const onClickContactBtn = () =>  {history.push("/contact");}
+  const onClickLoginPageBtn = () => {history.push("/loginPage");}
 
   return (
     <div>
@@ -28,6 +29,7 @@ const Header = ({loggedInFunc}) => {
           <h1 className='universityHeader'>University</h1>
         </div>
         <div style={{'margin-right': '20px'}}>
+          <Button text='LoginPage' className={'header-btn'} onClickFunc={onClickLoginPageBtn}/>
           <Button text='Home' className={'header-btn'} onClickFunc={onClickHomeBtn}/>
           <Button text='Contact' className={'header-btn'} onClickFunc={onClickContactBtn}/>
           {!loggedIn && <Button text='Login'  className={'header-btn-login'} onClickFunc={onClickLoginBtn} />}
