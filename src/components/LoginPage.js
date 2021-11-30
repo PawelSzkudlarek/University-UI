@@ -8,13 +8,16 @@ const LoginPage = () => {
         axios.post('http://localhost:9091/api/login', {
             username: form.username.value,
             password: form.password.value
-        }).then(response => {
-            if (response.status === 200) {
-                console.log('You are logged in')
-            }
-        }).catch(error => {
-            console.log('Cannot login')
         })
+            .then(response => {
+                if (response.status === 200) {
+                    const token = response.headers.authorization
+                    console.log('You are logged in')
+                    console.log('Token: ' + token)
+                }
+            }).catch(error => {
+                console.log('Cannot login')
+            })
     }
 
     const handleSubmit = (event) => {
