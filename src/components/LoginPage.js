@@ -1,22 +1,32 @@
 import axios from 'axios';
 import React from 'react';
 import { Button, Form } from "react-bootstrap";
+import { useHistory } from "react-router-dom";
+import { useUserUpdate } from '../contexts/UserContext';
+import useToken from '../hooks/useToken';
 
-const LoginPage = () => {
+const LoginPage = ({ setRole }) => {
+    const token = useToken()
+    const history = useHistory()
 
-    const login = (form) => {
+    const updateRole = (userRole) => {
+        setRole(userRole)
+    }
+
+    const logging = (form) => {
         axios.post('http://localhost:9091/api/login', {
             username: form.username.value,
             password: form.password.value
         })
-            .then(response => {
+        .then(response => {
                 if (response.status === 200) {
-                    const token = response.headers.authorization
+                    token.setToken(response.headers.authorization)
+                    updateRole(response.headers.userrole)
+                    history.push('/')
                     console.log('You are logged in')
-                    console.log('Token: ' + token)
                 }
             }).catch(error => {
-                console.log('Cannot login')
+                console.log('Something happend when you while logging in.')
             })
     }
 
@@ -28,7 +38,7 @@ const LoginPage = () => {
         // }
         // setValidated(true);
 
-        login(form)
+        logging(form)
     };
 
     return (

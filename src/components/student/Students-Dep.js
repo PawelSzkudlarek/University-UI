@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
-import Student from './Student'
-import Button from './../Button'
+import Student from './Student-Dep'
+import Button from '../Button'
 import StudentForm from './StudentForm'
 
 //rafc shortcut

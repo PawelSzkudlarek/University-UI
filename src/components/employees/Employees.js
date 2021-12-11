@@ -4,6 +4,7 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { Button, ButtonGroup, Card, FormControl, InputGroup, Table } from 'react-bootstrap';
 import { Link, useHistory } from "react-router-dom";
+import useToken from '../../hooks/useToken';
 import CustomToast from '../toast/CustomToast';
 
 
@@ -15,11 +16,19 @@ const Employees = () => {
   const [size, setSize] = useState(10)
   const [totalPages, setTotalPages] = useState()
   const [showDeleteToast, setShowDeleteToast] = useState(false)
-  const history = useHistory();
+  const history = useHistory()
+  const token = useToken()
 
   const findEmployees = (currentPage) => {
     currentPage -= 1;
-    axios.get('http://localhost:9091/api/school/employee/findAll?page=' + currentPage + "&size=" + size)
+
+    let config = {
+      headers: {
+        'Authorization': token.token
+      }
+    }
+
+    axios.get('http://localhost:9091/api/school/employee/findAll?page=' + currentPage + "&size=" + size, config)
       .then(response => response.data)
       .then(data => {
         setEmployees(data.content)

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Button, Col, Dropdown, Form, Row } from "react-bootstrap";
 import { useParams } from 'react-router';
+import useToken from '../../hooks/useToken';
 import CustomToast from '../toast/CustomToast';
 
 const Employee = () => {
@@ -23,12 +24,19 @@ const Employee = () => {
   const [postCode, setPostCode] = useState()
 
   const { id } = useParams()
+  const token = useToken()
+
+  let config = {
+    headers: {
+      'Authorization': token.token,
+    }
+  }
 
   useEffect(() => {
     const employeeId = id
     if (employeeId) {
       setEditMode(true)
-      axios.get('http://localhost:9091/api/school/employee/details?id=' + employeeId)
+      axios.get('http://localhost:9091/api/school/employee/details?id=' + employeeId, config)
         .then(response => {
           setName(response.data.name)
           setLastName(response.data.lastName)
@@ -43,7 +51,7 @@ const Employee = () => {
         })
         .catch(error => {
           console.error('There was an error!', error);
-        });
+        }, config);
     }
   }, [])
 
@@ -63,7 +71,7 @@ const Employee = () => {
       apartmentNo: form.apartmentNo.value,
       postCode: form.postCode.value,
       workArea: workArea,
-    })
+    }, config)
       .then(response => {
         setShowSuccessToast(true)
         setTimeout(() => setShowSuccessToast(false), 2000)
@@ -89,7 +97,7 @@ const Employee = () => {
       postCode: form.postCode.value,
       workArea: workArea,
       createUser: form.createUser.checked
-    })
+    }, config)
       .then(response => {
         console.log('New employee submited..')
         setShowSuccessToast(true)
@@ -108,7 +116,6 @@ const Employee = () => {
     event.stopPropagation();
     // }
     // setValidated(true);
-
     id ? onUpdate(form) : onSubmit(form)
   };
 
@@ -154,7 +161,7 @@ const Employee = () => {
               </Form.Group>
             </Row>
 
-            {createUser &&
+          {createUser &&
               <div>
                 <Form.Group controlId="username" >
                   <Form.Control type="text" placeholder="Username" size='sm' />
@@ -168,7 +175,6 @@ const Employee = () => {
                   <Form.Control type="password" placeholder="Password" size='sm' />
                 </Form.Group>
               </div>}
-
           </div>}
 
         <Form.Text className="text-muted" size='sm'>Address</Form.Text>
@@ -209,7 +215,6 @@ const Employee = () => {
           <Button variant="outline-success" type="submit">Update</Button> :
           <Button variant="outline-primary" type="submit">Submit</Button>
         }
-
       </Form>
     </div>
   )

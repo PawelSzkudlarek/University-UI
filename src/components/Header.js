@@ -1,26 +1,27 @@
-import Button from './Button'
-import { useState } from 'react'
+import { useContext } from "react";
 import { useHistory } from "react-router-dom";
+import { ThemeContext, UserRoleContext } from "../App";
+import Button from './Button';
 
-const Header = ({loggedInFunc}) => {
-
-  const [loggedIn, setLoggedIn] = useState(false)
+const Header = ({ setUserRole }) => {
   const history = useHistory();
 
   const onClickLoginBtn = () => {
-    setLoggedIn(true)
-    loggedInFunc(true)
+    history.push('/loginPage')
   }
 
   const onClickLogoutBtn = () => {
-    setLoggedIn(false)
-    loggedInFunc(false)
+    localStorage.removeItem('token')
+    localStorage.removeItem('userRole')
+    setUserRole(null)
     history.push("/")
   }
 
-  const onClickHomeBtn = () => {history.push("/");}
-  const onClickContactBtn = () =>  {history.push("/contact");}
-  const onClickLoginPageBtn = () => {history.push("/loginPage");}
+  const onClickHomeBtn = () => { history.push("/"); }
+  const onClickContactBtn = () => { history.push("/contact"); }
+
+  const dark = useContext(ThemeContext)
+  const userRole = useContext(UserRoleContext)
 
   return (
     <div>
@@ -28,14 +29,17 @@ const Header = ({loggedInFunc}) => {
         <div>
           <h1 className='universityHeader'>University</h1>
         </div>
-        <div style={{'margin-right': '20px'}}>
-          <Button text='LoginPage' className={'header-btn'} onClickFunc={onClickLoginPageBtn}/>
-          <Button text='Home' className={'header-btn'} onClickFunc={onClickHomeBtn}/>
-          <Button text='Contact' className={'header-btn'} onClickFunc={onClickContactBtn}/>
-          {!loggedIn && <Button text='Login'  className={'header-btn-login'} onClickFunc={onClickLoginBtn} />}
-          {loggedIn  && <Button text='Logout' className={'header-btn-login'} onClickFunc={onClickLogoutBtn} />}
+        <div style={{ 'margin-right': '20px' }}>
+          <div>
+            {dark && <Button text='ShowButton' className={'header-btn'} />}
+          </div>
+          <Button text='Home' className={'header-btn'} onClickFunc={onClickHomeBtn} />
+          <Button text='Contact' className={'header-btn'} onClickFunc={onClickContactBtn} />
+          {!userRole && <Button text='Login' className={'header-btn-login'} onClickFunc={onClickLoginBtn} />}
+          {userRole && <Button text='Logout' className={'header-btn-login'} onClickFunc={onClickLogoutBtn} />}
         </div>
       </header>
+      {userRole && <div style={{ float: "right", marginRight: '20px' }}>Logged as: {userRole}</div>}
     </div>
   )
 }
